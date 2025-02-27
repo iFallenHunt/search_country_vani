@@ -1,120 +1,220 @@
-# Search Countries
+# Search Countries 🌍
 
-Uma aplicação web elegante e minimalista para explorar informações sobre países usando a API Rest Countries.
+A modern, elegant and minimalist web application to explore information about countries using the Countries Rest API. This project provides an intuitive interface for users to search, filter and view detailed information about countries around the world.
 
-## 🌟 Funcionalidades
+## 🌟 Features
 
-- 🔍 Busca de países por nome
-- 🌍 Filtros por região, idioma e continente
-- 📱 Design responsivo
-- 🌓 Modo escuro
-- 🌐 Suporte para múltiplos idiomas (Português e Inglês)
-- 💖 Sistema de favoritos
-- 📋 Visualização em grade e lista
-- ⚡ Interface rápida e otimizada
+### Main Features
+- 🔍 Real-time country search with debounce
+- 🌐 Language support (English and Portuguese)
+- 🌓 Light/Dark theme with system preference detection
+- 📱 Fully responsive design for all devices
+- 💖 Bookmark system with local persistence
+- 📊 Dynamic display of country count
+- 🔄 Multiple view modes (Grid/List)
+- ⚡ Optimized performance with lazy loading
 
-## 🛠️ Tecnologias Utilizadas
+### Search and Filtering
+- Instant search with debounce optimization
+- Filter by language
+- Filter by continent
+- Clear filter functionality
+- Dynamic display of result count
 
+### Display Options
+- Grid view for compact display
+- List view for detailed information
+- Pagination with dynamic page count
+- Responsive layout adapting to screen size
+
+### User Preferences
+- Theme preference saved in localStorage
+- Language preference persistence
+- Favorites list saved locally
+- Last used view mode is remembered
+
+## 🛠️ Technical Stack
+
+### Main Technologies
 - HTML5
-- CSS3
-- JavaScript (jQuery)
-- Bootstrap 5
-- Font Awesome
-- Rest Countries API
+- CSS3 with CSS Variables
+- JavaScript (ES6+)
 
-## 🚀 Como Executar
+### Libraries and Frameworks
+- jQuery 3.6.0
+- Bootstrap 5.3.0
+- Font Awesome 6.0.0
 
-1. Clone o repositório:
-```bash
-git clone https://seu-repositorio/search-countries.git
-cd search-countries
-```
+### APIs
+- Rest Countries API v3.1
 
-2. Abra o arquivo `index.html` em seu navegador web preferido.
-
-## 📦 Estrutura do Projeto
+## 🔧 Project Structure
 
 ```
 search-countries/
-├── index.html
+├── index.html # Main HTML Structure
 ├── assets/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       ├── main.js
-│       └── translations.js
-└── README.md
+│ ├── css/
+│ │ └── style.css # Custom styles and themes
+│ └── js/
+│ ├── main.js # Main application logic
+│ └── translations.js # Internationalization strings
+├── README.md # Documentation in English
+└── README-PTBR.md # Documentation in Portuguese
 ```
 
-## 🎨 Interface
+## 🚀 Getting Started
 
-### Modo Claro
-- Design limpo e minimalista
-- Alta legibilidade
-- Cores suaves e agradáveis
+### Prerequisites
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Internet connection for API access
 
-### Modo Escuro
-- Redução da fadiga visual
-- Contraste otimizado
-- Experiência noturna confortável
+### Installation
 
-## 🔄 API
+1. Clone the repository:
+\`\`\`bash
+git clone https://github.com/yourusername/search-countries.git
+\`\`\`
 
-O projeto utiliza a [Rest Countries API](https://restcountries.com/) para obter informações detalhadas sobre os países. A API é consumida através de requisições AJAX usando jQuery.
+2. Navigate to the github directory project:
+\`\`\`bash
+cd search-countries
+\`\`\`
 
-### Endpoints Utilizados
+3. Open index.html in your browser or use a local server:
+\`\`\`bash
+python -m http.server 8000
+# or
+php -S localhost:8000
+\`\`\`
 
-- `GET https://restcountries.com/v3.1/all` - Obtém todos os países
-- `GET https://restcountries.com/v3.1/name/{name}` - Busca países por nome
+## 📊 Application Flow
 
-## 💾 Armazenamento Local
+\`\`\`mermaid
+graph TD
+A[User Access] --> B[Application Loading]
+B --> C[Search Countries in API]
+C --> D[Initialize Interface]
+D --> E[Configure Event Listeners]
 
-O aplicativo utiliza o localStorage para persistir:
-- Países favoritos
-- Preferência de tema (claro/escuro)
-- Idioma selecionado
+E --> F[User Interactions]
+F --> G[Search]
+F --> H[Filter]
+F --> I[Change View]
+F --> J[Switch Theme]
+F --> K[Change Language]
+F --> L[Manage Favorites]
 
-## 🌐 Internacionalização
+G --> M[Refresh Display]
+H --> M
+I --> M
+J --> M
+K --> M
+L --> M
 
-Suporte completo para:
-- Português (Brasil)
-- Inglês
+M --> N[Render Countries]
+N --> O[Refresh Counter]
+O --> P[Refresh Pagination]
+\`\`\`
 
-## 🔍 Funcionalidades de Busca e Filtro
+## 💾 Local Storage Structure
 
-- Busca em tempo real
-- Filtros combinados
-- Paginação dinâmica
-- Alternância entre visualizações (grade/lista)
+The application uses localStorage for persistent data:
+\`\`\`javascript
+{
+"favorites": ["USA", "BRA", "GBR"], // Array of country codes
+"theme": "dark" | "light", // Current theme
+"language": "en" | "pt-BR" // Current language
+}
+\`\`\`
 
-## 📱 Responsividade
+## 🌐 API Integration
 
-O aplicativo é totalmente responsivo e se adapta a diferentes tamanhos de tela:
-- Desktop (1200px+)
-- Laptop (992px-1199px)
-- Tablet (768px-991px)
-- Mobile (< 768px)
+### Endpoints Used
+- \`GET https://restcountries.com/v3.1/all\`
+- Searches all countries
+- Used for initial loading and filtering
 
-## 🤝 Contribuindo
+### Data Structure
+\`\`\`typescript
+interface Country {
+name: {
+common: string;
+official: string;
+};
+capital: string[];
+population: number;
+area: number;
+languages: Record<string, string>;
+flags: {
+png: string;
+svg: string;
+};
+continents: string[];
+cca3: string; // Country Code
+}
+\`\`\`
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+## 📱 Responsive Breakpoints
 
-## 📄 Licença
+- Mobile: < 768px
+- Tablet: 768px - 991px
+- Laptop: 992px - 1199px
+- Desktop: ≥ 1200px
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+## 🎨 Theme System
 
-## 🎯 Próximos Passos
+### Light Theme Variables
+\`\`\`css
+--primary-bg: #ffffff
+--secondary-bg: #f8f9fa
+--text-color: #212529
+--border-color: #dee2e6
+\`\`\`
 
-- [ ] Adicionar mais idiomas
-- [ ] Implementar testes automatizados
-- [ ] Adicionar mais informações sobre os países
-- [ ] Implementar comparação entre países
-- [ ] Adicionar gráficos e estatísticas
+### Dark Theme Variables
+\`\`\`css
+--primary-bg: #1a1a1a
+--secondary-bg: #2d2d2d
+--text-color: #ffffff
+--border-color: #404040
+\`\`\`
 
-## 📞 Contato
+## 🤝 How to Contribute
 
-Para questões e sugestões, por favor abra uma issue no repositório. 
+1. Fork the repository
+2. Create your feature branch: \`git checkout -b feature/AwesomeFeature\`
+3. Commit your changes: \`git commit -m 'Add some AwesomeFeature'\`
+4. Push to the branch: \`git push origin feature/AwesomeFeature\`
+5. Open a Pull Request
+
+### Commit Guidelines
+- Use semantic commit messages
+- Keep commits atomic and focused
+- Reference issues in commit messages when applicable
+
+## 📈 Future Improvements
+
+- [ ] Add more languages
+- [ ] Implement automated testing
+- [ ] Add country comparison feature
+- [ ] Include statistical charts
+- [ ] Add PWA support
+- [ ] Implement caching system
+- [ ] Add more country details
+- [ ] Include interactive maps
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👥 Authors
+
+- *Early Work* - [iFallenHunter](https://github.com/iFallenHunter)
+
+## 🙏 Thanks
+
+- [Rest Countries API](https://restcountries.com/) for providing the country data
+- [Bootstrap](https://getbootstrap.com/) for the UI framework
+- [Font Awesome](https://fontawesome.com/) for the icons
+- All the contributors who helped this project grow
