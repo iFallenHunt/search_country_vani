@@ -320,4 +320,53 @@ body {
     border-color: var(--danger-color);
     color: white;
     transform: rotate(90deg);
+}
+
+/* Filter Controls */
+.filters-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.filters-container .form-select {
+    max-width: 150px;
+    padding: 0.4rem 2rem 0.4rem 0.75rem;
+    height: 38px;
+    font-size: 0.9rem;
+}
+
+.filters-container .btn {
+    padding: 0.4rem 0.75rem;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#clearFilters {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+}
+
+#countriesCount {
+    white-space: nowrap;
+    padding: 0.4rem 0.75rem;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .filters-container {
+        flex-wrap: wrap;
+    }
+    
+    .filters-container .form-select {
+        max-width: none;
+        flex: 1 1 calc(50% - 0.25rem);
+    }
 } 
