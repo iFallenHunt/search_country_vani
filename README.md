@@ -1,3 +1,5 @@
+[BR](README-PTBR.md)
+
 # Search Countries 🌍
 
 A modern, elegant and minimalist web application to explore information about countries using the Countries Rest API. This project provides an intuitive interface for users to search, filter and view detailed information about countries around the world.
@@ -72,25 +74,25 @@ search-countries/
 ### Installation
 
 1. Clone the repository:
-\`\`\`bash
+```bash
 git clone https://github.com/yourusername/search-countries.git
-\`\`\`
+```
 
 2. Navigate to the github directory project:
-\`\`\`bash
+```bash
 cd search-countries
-\`\`\`
+```
 
 3. Open index.html in your browser or use a local server:
-\`\`\`bash
+```bash
 python -m http.server 8000
 # or
 php -S localhost:8000
-\`\`\`
+```
 
 ## 📊 Application Flow
 
-\`\`\`mermaid
+```mermaid
 graph TD
 A[User Access] --> B[Application Loading]
 B --> C[Search Countries in API]
@@ -115,28 +117,28 @@ L --> M
 M --> N[Render Countries]
 N --> O[Refresh Counter]
 O --> P[Refresh Pagination]
-\`\`\`
+```
 
 ## 💾 Local Storage Structure
 
 The application uses localStorage for persistent data:
-\`\`\`javascript
+```javascript
 {
 "favorites": ["USA", "BRA", "GBR"], // Array of country codes
 "theme": "dark" | "light", // Current theme
 "language": "en" | "pt-BR" // Current language
 }
-\`\`\`
+```
 
 ## 🌐 API Integration
 
 ### Endpoints Used
-- \`GET https://restcountries.com/v3.1/all\`
+- `GET https://restcountries.com/v3.1/all`
 - Searches all countries
 - Used for initial loading and filtering
 
 ### Data Structure
-\`\`\`typescript
+```typescript
 interface Country {
 name: {
 common: string;
@@ -153,7 +155,7 @@ svg: string;
 continents: string[];
 cca3: string; // Country Code
 }
-\`\`\`
+```
 
 ## 📱 Responsive Breakpoints
 
@@ -165,27 +167,27 @@ cca3: string; // Country Code
 ## 🎨 Theme System
 
 ### Light Theme Variables
-\`\`\`css
+```css
 --primary-bg: #ffffff
 --secondary-bg: #f8f9fa
 --text-color: #212529
 --border-color: #dee2e6
-\`\`\`
+```
 
 ### Dark Theme Variables
-\`\`\`css
+```css
 --primary-bg: #1a1a1a
 --secondary-bg: #2d2d2d
 --text-color: #ffffff
 --border-color: #404040
-\`\`\`
+```
 
 ## 🤝 How to Contribute
 
 1. Fork the repository
-2. Create your feature branch: \`git checkout -b feature/AwesomeFeature\`
-3. Commit your changes: \`git commit -m 'Add some AwesomeFeature'\`
-4. Push to the branch: \`git push origin feature/AwesomeFeature\`
+2. Create your feature branch: `git checkout -b feature/AwesomeFeature`
+3. Commit your changes: `git commit -m 'Add some AwesomeFeature'`
+4. Push to the branch: `git push origin feature/AwesomeFeature`
 5. Open a Pull Request
 
 ### Commit Guidelines

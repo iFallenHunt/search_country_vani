@@ -1,3 +1,5 @@
+[EN](README.md)
+
 # Search Countries 🌍
 
 Uma aplicação web moderna, elegante e minimalista para explorar informações sobre países usando a API Rest Countries. Este projeto fornece uma interface intuitiva para os usuários pesquisarem, filtrarem e visualizarem informações detalhadas sobre países em todo o mundo.
@@ -72,25 +74,25 @@ search-countries/
 ### Instalação
 
 1. Clone o repositório:
-\`\`\`bash
+```bash
 git clone https://github.com/yourusername/search-countries.git
-\`\`\`
+```
 
 2. Navegue até o diretório do projeto:
-\`\`\`bash
+```bash
 cd search-countries
-\`\`\`
+```
 
 3. Abra o index.html no seu navegador ou use um servidor local:
-\`\`\`bash
+```bash
 python -m http.server 8000
 # ou
 php -S localhost:8000
-\`\`\`
+```
 
 ## 📊 Fluxo da Aplicação
 
-\`\`\`mermaid
+```mermaid
 graph TD
     A[Acesso do Usuário] --> B[Carregamento da Aplicação]
     B --> C[Busca Países na API]
@@ -115,28 +117,28 @@ graph TD
     M --> N[Renderiza Países]
     N --> O[Atualiza Contador]
     O --> P[Atualiza Paginação]
-\`\`\`
+```
 
 ## 💾 Estrutura do Armazenamento Local
 
 A aplicação utiliza localStorage para dados persistentes:
-\`\`\`javascript
+```javascript
 {
   "favorites": ["USA", "BRA", "GBR"], // Array de códigos de países
   "theme": "dark" | "light",          // Tema atual
   "language": "en" | "pt-BR"          // Idioma atual
 }
-\`\`\`
+```
 
 ## 🌐 Integração com API
 
 ### Endpoints Utilizados
-- \`GET https://restcountries.com/v3.1/all\`
+- `GET https://restcountries.com/v3.1/all`
   - Busca todos os países
   - Usado para carregamento inicial e filtragem
 
 ### Estrutura de Dados
-\`\`\`typescript
+```typescript
 interface Country {
   name: {
     common: string;
@@ -153,7 +155,7 @@ interface Country {
   continents: string[];
   cca3: string; // Código do país
 }
-\`\`\`
+```
 
 ## 📱 Breakpoints Responsivos
 
@@ -165,27 +167,27 @@ interface Country {
 ## 🎨 Sistema de Temas
 
 ### Variáveis do Tema Claro
-\`\`\`css
+```css
 --primary-bg: #ffffff
 --secondary-bg: #f8f9fa
 --text-color: #212529
 --border-color: #dee2e6
-\`\`\`
+```
 
 ### Variáveis do Tema Escuro
-\`\`\`css
+```css
 --primary-bg: #1a1a1a
 --secondary-bg: #2d2d2d
 --text-color: #ffffff
 --border-color: #404040
-\`\`\`
+```
 
 ## 🤝 Como Contribuir
 
 1. Faça um fork do repositório
-2. Crie sua branch de feature: \`git checkout -b feature/RecursoIncrivel\`
-3. Faça commit de suas alterações: \`git commit -m 'Adiciona algum RecursoIncrivel'\`
-4. Faça push para a branch: \`git push origin feature/RecursoIncrivel\`
+2. Crie sua branch de feature: `git checkout -b feature/RecursoIncrivel`
+3. Faça commit de suas alterações: `git commit -m 'Adiciona algum RecursoIncrivel'`
+4. Faça push para a branch: `git push origin feature/RecursoIncrivel`
 5. Abra um Pull Request
 
 ### Diretrizes de Commit
