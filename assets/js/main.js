@@ -6,61 +6,135 @@ $(document).ready(function() {
     let allCountries = [];
     let currentLanguage = 'pt-BR';
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    let currentSort = 'name'; // Default sort by name
 
     // DOM elements
     const $countriesContainer = $('#countriesContainer');
     const $pagination = $('#pagination');
     const $searchInput = $('#searchInput');
-    const $regionFilter = $('#regionFilter');
     const $languageFilter = $('#languageFilter');
     const $continentFilter = $('#continentFilter');
     const $viewToggle = $('#viewToggle');
     const $themeToggle = $('#themeToggle');
     const $languageSelector = $('#languageSelector');
+    const $loadingIndicator = $('#loadingIndicator');
+    const $favoritesContainer = $('#favoritesContainer');
+    const $favoritesButton = $('#favoritesButton');
+    const $countriesCount = $('#countriesCount');
+    const $clearFilters = $('#clearFilters');
+
+    // Initialize tooltips
+    $('[data-bs-toggle="tooltip"]').tooltip();
 
     // Initialize the application
     init();
 
     async function init() {
-        await fetchCountries();
-        setupEventListeners();
-        updateFilters();
-        renderCountries();
-        applyTranslations();
+        try {
+            console.log('Iniciando aplicação...');
+            showLoading();
+            const countries = await fetchCountries();
+            if (countries && countries.length > 0) {
+                console.log(`${countries.length} países carregados com sucesso`);
+                setupEventListeners();
+                updateFilters();
+                renderCountries();
+                applyTranslations();
+                updateFavoritesButton();
+                updateCountriesCount(countries.length);
+            } else {
+                console.error('Nenhum país foi carregado da API');
+                showError('Erro ao carregar países. Por favor, recarregue a página.');
+            }
+        } catch (error) {
+            console.error('Erro na inicialização:', error);
+            showError('Erro ao inicializar a aplicação. Por favor, recarregue a página.');
+        } finally {
+            hideLoading();
+        }
+    }
+
+    function showLoading() {
+        $loadingIndicator.removeClass('d-none');
+    }
+
+    function hideLoading() {
+        $loadingIndicator.addClass('d-none');
+    }
+
+    function showError(message) {
+        $countriesContainer.html(`<div class="alert alert-danger">${message}</div>`);
     }
 
     // Fetch countries from API
     async function fetchCountries() {
         try {
-            const response = await $.get('https://restcountries.com/v3.1/all');
-            allCountries = response;
-            return response;
+            console.log('Buscando países da API...');
+            const response = await $.ajax({
+                url: 'https://restcountries.com/v3.1/all',
+                method: 'GET',
+                timeout: 10000
+            });
+            
+            if (response && Array.isArray(response)) {
+                allCountries = response.sort((a, b) => a.name.common.localeCompare(b.name.common));
+                console.log('Dados dos países:', allCountries.slice(0, 3));
+                return response;
+            } else {
+                throw new Error('Resposta da API inválida');
+            }
         } catch (error) {
-            console.error('Error fetching countries:', error);
-            return [];
+            console.error('Erro ao buscar países:', error);
+            throw error;
         }
     }
 
     // Setup event listeners
     function setupEventListeners() {
         $searchInput.on('input', debounce(filterCountries, 300));
-        $regionFilter.on('change', filterCountries);
         $languageFilter.on('change', filterCountries);
         $continentFilter.on('change', filterCountries);
         $viewToggle.on('click', toggleView);
         $themeToggle.on('click', toggleTheme);
         $languageSelector.on('change', changeLanguage);
+        $('#favoritesModal').on('show.bs.modal', renderFavorites);
+        $clearFilters.on('click', clearAllFilters);
+    }
+
+    // Update favorites button state
+    function updateFavoritesButton() {
+        const favCount = favorites.length;
+        $favoritesButton.attr('title', `${favCount} ${translations[currentLanguage].favorites}`);
+        if (favCount > 0) {
+            $favoritesButton.addClass('active');
+        } else {
+            $favoritesButton.removeClass('active');
+        }
+    }
+
+    // Render favorites in modal
+    function renderFavorites() {
+        const favoriteCountries = allCountries.filter(country => favorites.includes(country.cca3));
+        $favoritesContainer.empty();
+
+        if (favoriteCountries.length === 0) {
+            $favoritesContainer.html(`<div class="alert alert-info">${translations[currentLanguage].noResults}</div>`);
+            return;
+        }
+
+        favoriteCountries.forEach(country => {
+            const card = createCountryCard(country);
+            $favoritesContainer.append(card);
+        });
     }
 
     // Update filter options
     function updateFilters() {
-        const regions = [...new Set(allCountries.map(country => country.region))].sort();
         const languages = [...new Set(allCountries.flatMap(country => 
             country.languages ? Object.values(country.languages) : []
         ))].sort();
         const continents = [...new Set(allCountries.map(country => country.continents?.[0]))].sort();
 
-        populateFilter($regionFilter, regions);
         populateFilter($languageFilter, languages);
         populateFilter($continentFilter, continents);
     }
@@ -77,32 +151,64 @@ $(document).ready(function() {
         $select.val(currentValue);
     }
 
+    // Update countries count
+    function updateCountriesCount(filteredCount) {
+        const totalCount = allCountries.length;
+        const text = filteredCount === totalCount 
+            ? translations[currentLanguage].totalCountries.replace('{0}', totalCount)
+            : translations[currentLanguage].filteredCountries.replace('{0}', filteredCount);
+        $countriesCount.text(text);
+    }
+
     // Filter countries based on search and filters
     function filterCountries() {
         const searchTerm = $searchInput.val().toLowerCase();
-        const region = $regionFilter.val();
         const language = $languageFilter.val();
         const continent = $continentFilter.val();
 
+        // Show/hide clear filters button
+        if (searchTerm || language || continent) {
+            $clearFilters.removeClass('d-none').attr('title', translations[currentLanguage].clearFilters);
+        } else {
+            $clearFilters.addClass('d-none');
+        }
+
         const filtered = allCountries.filter(country => {
             const matchesSearch = country.name.common.toLowerCase().includes(searchTerm);
-            const matchesRegion = !region || country.region === region;
             const matchesLanguage = !language || (country.languages && Object.values(country.languages).includes(language));
             const matchesContinent = !continent || country.continents?.[0] === continent;
 
-            return matchesSearch && matchesRegion && matchesLanguage && matchesContinent;
+            return matchesSearch && matchesLanguage && matchesContinent;
         });
 
-        renderCountries(filtered);
+        const sortedFiltered = sortCountries(filtered);
+        updateCountriesCount(sortedFiltered.length);
+        renderCountries(sortedFiltered);
+    }
+
+    // Clear all filters
+    function clearAllFilters() {
+        $searchInput.val('');
+        $languageFilter.val('');
+        $continentFilter.val('');
+        $clearFilters.addClass('d-none');
+        filterCountries();
     }
 
     // Render countries to the DOM
     function renderCountries(countries = allCountries) {
+        console.log('Renderizando países...', countries.length);
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         const paginatedCountries = countries.slice(start, end);
 
         $countriesContainer.empty();
+        
+        if (paginatedCountries.length === 0) {
+            $countriesContainer.html('<div class="alert alert-info">' + translations[currentLanguage].noResults + '</div>');
+            return;
+        }
+
         if (currentView === 'list') {
             $countriesContainer.addClass('list-view');
         } else {
@@ -110,8 +216,12 @@ $(document).ready(function() {
         }
 
         paginatedCountries.forEach(country => {
-            const card = createCountryCard(country);
-            $countriesContainer.append(card);
+            try {
+                const card = createCountryCard(country);
+                $countriesContainer.append(card);
+            } catch (error) {
+                console.error('Erro ao criar card do país:', country, error);
+            }
         });
 
         renderPagination(Math.ceil(countries.length / itemsPerPage));
@@ -121,23 +231,53 @@ $(document).ready(function() {
     function createCountryCard(country) {
         const isFavorite = favorites.includes(country.cca3);
         const languagesList = country.languages ? Object.values(country.languages).join(', ') : '-';
+        const population = new Intl.NumberFormat(currentLanguage).format(country.population);
+        const area = new Intl.NumberFormat(currentLanguage).format(country.area);
         
         return $('<div>').addClass('col-12 col-md-6 col-lg-4 col-xl-3')
             .append($('<div>').addClass('country-card position-relative')
                 .append(
-                    $('<img>').attr('src', country.flags.png).attr('alt', `${country.name.common} flag`),
+                    $('<img>').attr('src', country.flags.png)
+                        .attr('alt', `${country.name.common} flag`)
+                        .attr('loading', 'lazy'),
                     $('<button>').addClass(`favorite-btn ${isFavorite ? 'active' : ''}`)
+                        .attr('data-bs-toggle', 'tooltip')
+                        .attr('title', isFavorite ? translations[currentLanguage].removeFromFavorites : translations[currentLanguage].addToFavorites)
                         .html('<i class="fas fa-heart"></i>')
                         .on('click', () => toggleFavorite(country)),
-                    $('<div>').addClass('p-3')
+                    $('<div>').addClass('country-info')
                         .append(
-                            $('<h5>').addClass('mb-2').text(country.name.common),
-                            $('<p>').addClass('mb-1').html(`<strong>${translations[currentLanguage].capital}:</strong> ${country.capital || '-'}`),
-                            $('<p>').addClass('mb-1').html(`<strong>${translations[currentLanguage].region}:</strong> ${country.region}`),
-                            $('<p>').addClass('mb-1').html(`<strong>${translations[currentLanguage].languages}:</strong> ${languagesList}`)
+                            $('<h3>').addClass('country-name').text(country.name.common),
+                            createDetailRow(translations[currentLanguage].capital, country.capital || '-'),
+                            createDetailRow(translations[currentLanguage].population, population),
+                            createDetailRow(translations[currentLanguage].languages, languagesList),
+                            createDetailRow(translations[currentLanguage].area, `${area} km²`)
                         )
                 )
             );
+    }
+
+    // Create detail row for country card
+    function createDetailRow(label, value) {
+        return $('<div>').addClass('country-detail')
+            .append(
+                $('<span>').addClass('country-detail-label').text(label + ':'),
+                $('<span>').addClass('country-detail-value').text(value)
+            );
+    }
+
+    // Sort countries
+    function sortCountries(countries, sortBy = currentSort) {
+        switch (sortBy) {
+            case 'name':
+                return countries.sort((a, b) => a.name.common.localeCompare(b.name.common));
+            case 'population':
+                return countries.sort((a, b) => b.population - a.population);
+            case 'area':
+                return countries.sort((a, b) => b.area - a.area);
+            default:
+                return countries;
+        }
     }
 
     // Render pagination
@@ -211,6 +351,7 @@ $(document).ready(function() {
             favorites.splice(index, 1);
         }
         localStorage.setItem('favorites', JSON.stringify(favorites));
+        updateFavoritesButton();
         renderCountries();
     }
 
@@ -220,12 +361,16 @@ $(document).ready(function() {
         localStorage.setItem('language', currentLanguage);
         applyTranslations();
         updateFilters();
+        updateCountriesCount(allCountries.length);
     }
 
     // Apply translations
     function applyTranslations() {
         $searchInput.attr('placeholder', translations[currentLanguage].search);
-        // Update other translations as needed
+        updateCountriesCount(allCountries.length);
+        
+        // Update tooltips
+        $('[data-bs-toggle="tooltip"]').tooltip('dispose').tooltip();
     }
 
     // Debounce function for search input
@@ -253,4 +398,11 @@ $(document).ready(function() {
         currentLanguage = savedLanguage;
         $languageSelector.val(savedLanguage);
     }
+
+    // Initialize tooltips after dynamic content is added
+    $countriesContainer.on('mouseover', '[data-bs-toggle="tooltip"]', function() {
+        if (!$(this).data('bs-tooltip')) {
+            $(this).tooltip();
+        }
+    });
 }); 
