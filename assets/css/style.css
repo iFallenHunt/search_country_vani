@@ -5,6 +5,14 @@
     --text-color: #212529;
     --border-color: #dee2e6;
     --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --button-hover: #e9ecef;
+    --badge-bg: #0d6efd;
+    --badge-text: #ffffff;
+    --accent-color: #0d6efd;
+    --danger-color: #dc3545;
+    --success-color: #198754;
+    --card-hover-transform: translateY(-5px);
+    --transition-speed: 0.3s;
 }
 
 /* Dark Theme */
@@ -14,38 +22,114 @@ body.dark-mode {
     --text-color: #ffffff;
     --border-color: #404040;
     --card-shadow: 0 2px 4px rgba(255,255,255,0.1);
+    --button-hover: #404040;
+    --badge-bg: #0d6efd;
+    --badge-text: #ffffff;
 }
 
 /* General Styles */
 body {
     background-color: var(--primary-bg);
     color: var(--text-color);
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
+    min-height: 100vh;
 }
 
+/* Navbar Styles */
 .navbar {
     background-color: var(--secondary-bg) !important;
     border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent-color) !important;
+}
+
+/* Button Styles */
+.btn {
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-outline-secondary,
+.btn-outline-primary {
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-primary:hover {
+    background-color: var(--button-hover);
+    border-color: var(--border-color);
+    color: var(--text-color);
+    transform: translateY(-2px);
+}
+
+/* Loading Indicator */
+#loadingIndicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: var(--primary-bg);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: var(--card-shadow);
 }
 
 /* Card Styles */
 .country-card {
     background-color: var(--secondary-bg);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 1rem;
     box-shadow: var(--card-shadow);
-    transition: transform 0.2s;
+    transition: all var(--transition-speed) ease;
+    height: 100%;
+    overflow: hidden;
 }
 
 .country-card:hover {
-    transform: translateY(-5px);
+    transform: var(--card-hover-transform);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
 .country-card img {
-    border-radius: 8px 8px 0 0;
+    border-radius: 1rem 1rem 0 0;
     object-fit: cover;
     height: 160px;
     width: 100%;
+    transition: transform var(--transition-speed) ease;
+}
+
+.country-card:hover img {
+    transform: scale(1.05);
+}
+
+.country-info {
+    padding: 1.5rem;
+}
+
+.country-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--accent-color);
+}
+
+.country-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.country-detail-label {
+    font-weight: bold;
+    color: var(--text-color);
 }
 
 /* List View */
@@ -54,37 +138,128 @@ body {
     flex-direction: row;
     align-items: center;
     margin-bottom: 1rem;
+    height: auto;
+    padding: 1rem;
 }
 
 .list-view .country-card img {
-    width: 150px;
-    height: 100px;
-    border-radius: 8px 0 0 8px;
+    width: 200px;
+    height: 120px;
+    border-radius: 0.5rem;
+    margin-right: 1.5rem;
+}
+
+.list-view .country-info {
+    flex: 1;
 }
 
 /* Favorite Button */
 .favorite-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 1rem;
+    right: 1rem;
     background: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 2.5rem;
+    height: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--transition-speed) ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .favorite-btn:hover {
     transform: scale(1.1);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
 }
 
 .favorite-btn.active {
-    color: #dc3545;
+    color: var(--danger-color);
+    background: white;
+}
+
+/* Form Controls */
+.form-select,
+.form-control {
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    transition: all var(--transition-speed) ease;
+}
+
+.form-select:focus,
+.form-control:focus {
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Countries Count Badge */
+#countriesCount {
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    white-space: nowrap;
+    transition: all var(--transition-speed) ease;
+}
+
+/* Pagination */
+.pagination {
+    margin-top: 2rem;
+}
+
+.page-link {
+    color: var(--accent-color);
+    border-color: var(--border-color);
+    transition: all var(--transition-speed) ease;
+}
+
+.page-link:hover {
+    background-color: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.page-item.active .page-link {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+/* Modal Styles */
+.modal-content {
+    background-color: var(--primary-bg);
+    border-radius: 1rem;
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color);
+    padding: 1.5rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--card-shadow);
+    font-size: 0.9rem;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
 }
 
 /* Responsive Adjustments */
@@ -96,10 +271,53 @@ body {
     
     .list-view .country-card {
         flex-direction: column;
+        padding: 0;
     }
     
     .list-view .country-card img {
         width: 100%;
-        border-radius: 8px 8px 0 0;
+        margin-right: 0;
+        margin-bottom: 1rem;
+        border-radius: 1rem 1rem 0 0;
     }
+
+    .d-flex.gap-2 {
+        flex-wrap: wrap;
+    }
+
+    .form-select {
+        flex: 1 1 calc(50% - 0.5rem);
+    }
+
+    .country-info {
+        padding: 1rem;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.country-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Clear Filters Button */
+#clearFilters {
+    padding: 0.75rem;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-speed) ease;
+}
+
+#clearFilters:hover {
+    background-color: var(--danger-color);
+    border-color: var(--danger-color);
+    color: white;
+    transform: rotate(90deg);
 } 
