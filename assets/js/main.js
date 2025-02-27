@@ -6,7 +6,6 @@ $(document).ready(function() {
     let allCountries = [];
     let currentLanguage = 'pt-BR';
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    let currentSort = 'name'; // Default sort by name
 
     // DOM elements
     const $countriesContainer = $('#countriesContainer');
@@ -179,11 +178,10 @@ $(document).ready(function() {
             const matchesContinent = !continent || country.continents?.[0] === continent;
 
             return matchesSearch && matchesLanguage && matchesContinent;
-        });
+        }).sort((a, b) => a.name.common.localeCompare(b.name.common));
 
-        const sortedFiltered = sortCountries(filtered);
-        updateCountriesCount(sortedFiltered.length);
-        renderCountries(sortedFiltered);
+        updateCountriesCount(filtered.length);
+        renderCountries(filtered);
     }
 
     // Clear all filters
