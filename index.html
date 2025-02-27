@@ -15,15 +15,22 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Search Countries</a>
-            <div class="d-flex align-items-center">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-globe-americas me-2"></i>
+                Search Countries
+            </a>
+            <div class="d-flex align-items-center gap-2">
                 <!-- Language Selector -->
-                <select class="form-select me-2" id="languageSelector">
+                <select class="form-select" id="languageSelector" data-bs-toggle="tooltip" data-bs-placement="bottom">
                     <option value="pt-BR">Português</option>
                     <option value="en">English</option>
                 </select>
+                <!-- Favorites Button -->
+                <button class="btn btn-outline-primary" id="favoritesButton" data-bs-toggle="modal" data-bs-target="#favoritesModal">
+                    <i class="fas fa-heart"></i>
+                </button>
                 <!-- Theme Toggle -->
-                <button class="btn btn-outline-secondary" id="themeToggle">
+                <button class="btn btn-outline-secondary" id="themeToggle" data-bs-toggle="tooltip" data-bs-placement="bottom">
                     <i class="fas fa-moon"></i>
                 </button>
             </div>
@@ -32,30 +39,43 @@
 
     <!-- Main Content -->
     <div class="container mt-4">
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="text-center mb-4 d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+        </div>
+
         <!-- Search and Filters -->
         <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-md-6 mb-3 mb-md-0">
                 <div class="input-group">
                     <input type="text" class="form-control" id="searchInput" placeholder="Buscar país...">
-                    <button class="btn btn-primary" id="searchButton">
+                    <button class="btn btn-primary" id="searchButton" data-bs-toggle="tooltip" data-bs-placement="top">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="d-flex gap-2">
-                    <select class="form-select" id="regionFilter">
-                        <option value="">Região</option>
-                    </select>
+                <div class="d-flex gap-2 align-items-center flex-wrap">
                     <select class="form-select" id="languageFilter">
                         <option value="">Idioma</option>
                     </select>
                     <select class="form-select" id="continentFilter">
                         <option value="">Continente</option>
                     </select>
-                    <button class="btn btn-outline-primary" id="viewToggle">
+                    <select class="form-select" id="sortSelect">
+                        <option value="name">Nome</option>
+                        <option value="population">População</option>
+                        <option value="area">Área</option>
+                    </select>
+                    <button class="btn btn-outline-danger d-none" id="clearFilters" data-bs-toggle="tooltip" data-bs-placement="top">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="btn btn-outline-primary" id="viewToggle" data-bs-toggle="tooltip" data-bs-placement="top">
                         <i class="fas fa-th-large"></i>
                     </button>
+                    <span class="badge bg-primary" id="countriesCount"></span>
                 </div>
             </div>
         </div>
@@ -77,10 +97,40 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Países Favoritos</h5>
+                    <h5 class="modal-title">
+                        <i class="fas fa-heart me-2"></i>
+                        Países Favoritos
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="favoritesContainer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div class="modal fade" id="compareModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-balance-scale me-2"></i>
+                        Comparar Países
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="compareContainer">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-select mb-3" id="country1Select"></select>
+                            <div id="country1Details"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-select mb-3" id="country2Select"></select>
+                            <div id="country2Details"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
