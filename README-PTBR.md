@@ -4,6 +4,24 @@
 
 Uma aplicação web moderna, elegante e minimalista para explorar informações sobre países usando a API Rest Countries. Este projeto fornece uma interface intuitiva para os usuários pesquisarem, filtrarem e visualizarem informações detalhadas sobre países em todo o mundo.
 
+## 🖼️ Visualizar 
+
+<p align="center">
+  <a href="assets/img/home-white.png"><img src="assets/img/home-white.png" alt="Home" width="200"></a>
+  <a href="assets/img/home-dark.png"><img src="assets/img/home-dark.png" alt="Home Dark" width="200"></a>
+  <a href="assets/img/home-pt.png"><img src="assets/img/home-pt.png" alt="Home PT" width="200"></a>
+</p>
+
+<p align="center">
+  <a href="assets/img/search.png"><img src="assets/img/search.png" alt="Search" width="200"></a>
+  <a href="assets/img/favorites.png"><img src="assets/img/favorites.png" alt="Favorites" width="200"></a>
+  <a href="assets/img/continent.png"><img src="assets/img/continent.png" alt="Continent" width="200"></a>
+</p>
+
+<p align="center">
+  <a href="assets/img/language.png"><img src="assets/img/language.png" alt="Language" width="200"></a>
+</p>
+
 ## 🌟 Funcionalidades
 
 ### Funcionalidades Principais
